@@ -1,0 +1,4 @@
+### Arquivo `requirements.txt`
+
+numpy
+scipy
