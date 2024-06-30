@@ -2,3 +2,9 @@ projecao.py
 texto.txt
 x.npy
 xtil.npy
+markov_points/__pycache__/__init__.cpython-311.pyc
+markov_points/__pycache__/MarkovPoints.cpython-311.pyc
+projecao/idx2palavra.pkl
+projecao/palavra2idx.pkl
+palavra2idx.pkl
+idx2palavra.pkl

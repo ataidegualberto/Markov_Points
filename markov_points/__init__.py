@@ -1,3 +1,3 @@
-from .MarkovPoints import MarkovPoints, intrinsic_dimension
+from .MarkovPoints import MarkovPoints, mean_perplexity
 
-__all__ = ['MarkovPoints', 'intrinsic_dimension']
+__all__ = ['MarkovPoints', 'mean_perplexity']

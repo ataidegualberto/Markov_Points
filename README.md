@@ -4,8 +4,15 @@ MarkovPoints is a Python package for generating state embeddings from Markov cha
 
 ## Installation
 
-You can install the package using `pip`:
+To install the package, clone the repository from GitHub and install it using `pip`:
 
+```sh
+git clone https://github.com/ataidegualberto/Markov_Points.git
+cd Markov_Points
+pip install .
+```
+
+Alternatively, you can install directly from PyPI once it's published:
 ```sh
 pip install markov_points
 ```
@@ -15,7 +22,7 @@ Here is a basic example of how to use the package:
 
 ```python
 import numpy as np
-from markov_points import MarkovPoints, intrinsic_dimension
+from markov_points import MarkovPoints, mean_perplexity
 
 # Example Markov chain matrix P and initial probabilities P0
 P = np.array([[0, 0.8, 0.2], [0.5, 0.5, 0], [0.5, 0.4, 0.1]])
@@ -24,8 +31,8 @@ P0 = np.array([9/27, 16/27, 2/27])
 # Initialize MarkovPoints object
 mkpts = MarkovPoints(P, P0, 2)
 
-# Calculate intrinsic dimension
-print(intrinsic_dimension(P))
+# Calculate mean perplexity
+print(mean_perplexity(P))
 
 # Fit the model
 mkpts.fit()
