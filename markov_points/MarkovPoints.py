@@ -164,7 +164,7 @@ class MarkovPoints:
                     P, neighbor_idxes = self.get_line_of_P(m)
                     k_non_neighbors = np.min([self.M, 3*len(P)])
                     non_neighbor_idxes = np.setdiff1d(np.arange(self.M), neighbor_idxes)[:k_non_neighbors]
-                    Q0 = self.calculate_line_of_Q0()
+                    Q0 = self.calculate_Q0()
                     Q = self.calculate_line_of_Q(m) # Just one line of Q
                     
                     # Adjustment for the a priori terms
@@ -198,7 +198,7 @@ class MarkovPoints:
                 M = np.random.permutation(self.M)
                 for m in M:
                     P, idxes = self.get_line_of_P(m)
-                    Q0 = self.calculate_line_of_Q0()
+                    Q0 = self.calculate_Q0()
                     Q = self.calculate_line_of_Q(m)[idxes] # Just one line of Q
                     
                     w0 = self.P0[m] - Q0[m]
@@ -206,17 +206,18 @@ class MarkovPoints:
                     u0 = v0 / np.linalg.norm(v0)
 
                     dJ_dx = w0 * u0
-                    dJ_dxtil = np.zeros_like(dJ_dx)
-                    for n in range(idxes.shape[0]):
-                        w = P[n] - Q[n]
+                    dJ_dxtil = np.zeros_like(self.xtil)
+                    for i, n in enumerate(idxes):
+                        w = P[i] - Q[n]
                         v = self.x[m, :] - self.xtil[n, :]
                         u = v / np.linalg.norm(v)
-                        
-                        dJ_dx += w * u
-                        dJ_dxtil -= w * u
+                        delta = w * u
 
+                        dJ_dx += delta
+                        dJ_dxtil[n, :] -= delta
+                    
                     self.x[m, :] -= self.eta * dJ_dx
-                    self.xtil[m, :] -= self.eta * dJ_dxtil
+                    self.xtil -= self.eta * dJ_dxtil
         
 
     def calculate_Q0(self) -> np.ndarray:
@@ -427,10 +428,10 @@ if __name__ == "__main__":
     P = np.array([[0, 0.8, 0.2], [0.5, 0.5, 0], [0.5, 0.4, 0.1]])
     P0 = np.array([9/27, 16/27, 2/27])
 
-    mkpts = MarkovPoints(P, P0, 2, False)
+    mkpts = MarkovPoints(P, P0, 2, False, 1000, 0.4)
     print(mean_perplexity(P))
     mkpts.fit()
 
-    print(mkpts.calculate_line_of_Q0())
+    print(mkpts.calculate_Q0())
     for i in range(3):
         print(mkpts.calculate_line_of_Q(i))
